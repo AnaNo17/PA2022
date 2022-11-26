@@ -28,8 +28,7 @@ public class Principal extends AppCompatActivity {
     Button regresor;
     private List<MyData> list;
     public static String TAG = "ola";
-    private int []images = { R.drawable.icono1,R.drawable.icono2,R.drawable.icono3, R.drawable.icono4, R.drawable.icono5,
-            R.drawable.icono6, R.drawable.icono7, R.drawable.icono8, R.drawable.icono9, R.drawable.icono10};
+    private int []images = { R.drawable.cerrar,R.drawable.llave};
 
 
     @Override

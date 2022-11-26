@@ -35,8 +35,7 @@ public class editacontra extends AppCompatActivity {
     private ListView listView;
     private EditText contra, red;
     private TextView indice;
-    private int []images = { R.drawable.icono1,R.drawable.icono2,R.drawable.icono3, R.drawable.icono4, R.drawable.icono5,
-            R.drawable.icono6, R.drawable.icono7, R.drawable.icono8, R.drawable.icono9, R.drawable.icono10};
+    private int []images = { R.drawable.cerrar,R.drawable.llave};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,7 +136,7 @@ public class editacontra extends AppCompatActivity {
     }
     public int toast(int i)
     {
-        Toast.makeText(getBaseContext(),"esotilin", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getBaseContext(),"Vas a editar la contraseña", Toast.LENGTH_SHORT).show();
         return i;
     }
 

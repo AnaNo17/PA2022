@@ -31,8 +31,7 @@ public class Agregacontra extends AppCompatActivity {
     Button regiscontra, regresor;
     private EditText contra2, red;
     private TextView contrasena, red2;
-    private int []images = { R.drawable.icono1,R.drawable.icono2,R.drawable.icono3, R.drawable.icono4, R.drawable.icono5,
-            R.drawable.icono6, R.drawable.icono7, R.drawable.icono8, R.drawable.icono9, R.drawable.icono10};
+    private int []images = { R.drawable.cerrar,R.drawable.llave,R.drawable.cerrar,R.drawable.llave};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

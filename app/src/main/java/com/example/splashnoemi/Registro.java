@@ -40,7 +40,7 @@ public class Registro extends AppCompatActivity {
     ImageButton Calendario;
     EditText FechaNac;
     List<MyData> lista;
-    int []images = { R.drawable.icono1,R.drawable.icono2,R.drawable.icono3};
+    int []images = { R.drawable.cerrar,R.drawable.llave};
     private static final String TAG = "MainActivity";
     public static final String archivo = "archivo.json";
     private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
@@ -138,16 +138,16 @@ public class Registro extends AppCompatActivity {
                     myData = new MyData();
                     myData.setContra( String.format( "Contraseña%d" , (int)(Math.random()*10000) ) );
                     if(i==0){
-                        myData.setRed(String.format( "Facebook"));
+                        myData.setRed(String.format( "Saes"));
                         myData.setImage(images[0]);
                     }
                     if(i==1){
-                        myData.setRed(String.format( "Instagram"));
+                        myData.setRed(String.format( "Servicio Social"));
                         myData.setImage(images[1]);
                     }
                     if(i==2){
-                        myData.setRed(String.format( "Whatsapp" ));
-                        myData.setImage(images[2]);
+                        myData.setRed(String.format( "Correo" ));
+                        myData.setImage(images[0]);
                     }
                     lista.add(myData);
                 }
@@ -158,7 +158,7 @@ public class Registro extends AppCompatActivity {
                 info.setEdad(String.valueOf(edad.getText()));
                 info.setSexo(sexo);
                 info.setTusu(tipoU);
-                info.setHijos(mascotas);
+                info.setmascotas(mascotas);
                 info.setTelefono(String.valueOf(Telefono.getText()));
                 info.setFechaNac(String.valueOf(FechaNac.getText()));
                 info.setContras(lista);

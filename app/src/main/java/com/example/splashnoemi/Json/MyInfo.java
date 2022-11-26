@@ -9,7 +9,7 @@ public class MyInfo implements Serializable {
     private String edad;
     private String sexo;
     private String Tusu;
-    private String hijos;
+    private String mascotas;
     private String Telefono;
     private String FechaNac;
     private List<MyData> contras;
@@ -72,12 +72,12 @@ public class MyInfo implements Serializable {
         Tusu = tusu;
     }
 
-    public String getHijos() {
-        return hijos;
+    public String getmascotas() {
+        return mascotas;
     }
 
-    public void setHijos(String hijos) {
-        this.hijos = hijos;
+    public void setmascotas(String mascotas) {
+        this.mascotas = mascotas;
     }
 
     public String getTelefono() {
