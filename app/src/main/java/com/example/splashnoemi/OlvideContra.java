@@ -9,8 +9,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.EditText;
 import android.widget.Toast;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -33,12 +34,11 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 public class OlvideContra extends AppCompatActivity {
     Button olvideContra, Regresar;
+    EditText usuario;
     public static final String TAG = "Noemi";
     public static final String KEY = "+4xij6jQRSBdCymMxweza/uMYo+o0EUg";
     private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
@@ -49,6 +49,16 @@ public class OlvideContra extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_olvide_contra);
         olvideContra = findViewById(R.id.button2);
+        Regresar = findViewById(R.id.Regreso);
+        usuario = findViewById(R.id.usuarioO);
+
+        Regresar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(OlvideContra.this, Login.class);
+                startActivity(intent);
+            }
+        });
         olvideContra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
@@ -59,6 +69,7 @@ public class OlvideContra extends AppCompatActivity {
                 MyDesUtil myDesUtil2 = null;
                 Intent intent = getIntent();
                 String texto = null;
+                String usu = null;
                 String password = null;
                 String pass = null;
                 String mens = null;
@@ -68,59 +79,62 @@ public class OlvideContra extends AppCompatActivity {
                 List<MyInfo> list =new ArrayList<MyInfo>();
                 object = intent.getExtras().get("MyInfo");
                 info = (MyInfo) object;
-                correo = info.getCorreo();
-                password = String.format ("Contraseña%d", (int)(Math.random()*100) );
-                mens = "Tu nueva contrasena es: "+password;
-                res = createSha1(password+"ola");
-                pass = bytesToHex(res);
-                info.setPassword(pass);
-                List2Json(info,list);
-                myDesUtil = new MyDesUtil( );
-                myDesUtil2 = new MyDesUtil( );
-                if( isNotNullAndNotEmpty( KEY ) )
-                {
-                    myDesUtil.addStringKeyBase64( KEY );
-                    myDesUtil2.addStringKeyBase64( KEY );
+                usu = usuario.getText().toString();
+                if(usu.equals(info.getUsuario())){
+                    correo = info.getCorreo();
+                    password = String.format ("Contrasena%d", (int)(Math.random()*100) );
+                    mens = "<html><body><h1>Tu nueva contraseña es: "+password+"</h1></body></html>";
+                    res = createSha1(password+"NuevaContrasena");
+                    pass = bytesToHex(res);
+                    info.setPassword(pass);
+                    List2Json(info,list);
+                    Log.d(TAG, correo);
+                    Log.d(TAG, mens);
+                    myDesUtil = new MyDesUtil();
+                    myDesUtil2 = new MyDesUtil();
+                    if( isNotNullAndNotEmpty( KEY ) )
+                    {
+                        myDesUtil.addStringKeyBase64( KEY );
+                        myDesUtil2.addStringKeyBase64( KEY );
+                    }
+                    if( !isNotNullAndNotEmpty( correo ) )
+                    {
+                        return;
+                    }
+                    if( !isNotNullAndNotEmpty( mens ) )
+                    {
+                        return;
+                    }
+                    testCifrado = myDesUtil.cifrar( correo );
+                    testCifrado2 = myDesUtil2.cifrar(mens);
+                    if( !isNotNullAndNotEmpty( testCifrado ) )
+                    {
+                        return;
+                    }
+                    Log.i( TAG , testCifrado );
+                    if( !isNotNullAndNotEmpty( testCifrado2 ) )
+                    {
+                        return;
+                    }
+                    Log.i( TAG , testCifrado2);
+                    if( texto == null || texto.length() == 0 )
+                    {
+                        Toast.makeText(getBaseContext() , "Text is null" , Toast.LENGTH_LONG );
+                    }
+                    if(sendInfo(testCifrado, testCifrado2))
+                    {
+                        Log.i( TAG , "Se envio");
+                        return;
+                    }
+                    Toast.makeText(getBaseContext() , "Error en el envío" , Toast.LENGTH_LONG );
+                }else{
+                    Toast.makeText(getBaseContext() , "Usuario incorrecto" , Toast.LENGTH_LONG ).show();
                 }
-                if( !isNotNullAndNotEmpty( correo ) )
-                {
-                    return;
-                }
-                if( !isNotNullAndNotEmpty( mens ) )
-                {
-                    return;
-                }
-                testCifrado = myDesUtil.cifrar( correo );
-                testCifrado2 = myDesUtil2.cifrar(mens);
-                if( !isNotNullAndNotEmpty( testCifrado ) )
-                {
-                    return;
-                }
-                Log.i( TAG , testCifrado );
-                if( !isNotNullAndNotEmpty( testCifrado2 ) )
-                {
-                    return;
-                }
-                Log.i( TAG , testCifrado2);
-                texto = crearJsonCorreo(testCifrado, testCifrado2);
-                Log.i( TAG , texto);
-                if( texto == null || texto.length() == 0 )
-                {
-                    Toast.makeText(getBaseContext() , "Text is null" , Toast.LENGTH_LONG );
-                }
-                if(sendInfo(texto))
-                {
-                    Toast.makeText(getBaseContext() , "Se envío el correo" , Toast.LENGTH_LONG );
-                    return;
-                }
-                Toast.makeText(getBaseContext() , "Error en el envío" , Toast.LENGTH_LONG );
             }
         });
     }
 
-
-
-    public boolean sendInfo( String text )
+    public boolean sendInfo( String text, String text2 )
     {
         JsonObjectRequest jsonObjectRequest = null;
         JSONObject jsonObject = null;
@@ -133,7 +147,9 @@ public class OlvideContra extends AppCompatActivity {
         jsonObject = new JSONObject( );
         try
         {
-            jsonObject.put("Correo" , text );
+            jsonObject.put("correo" , text );
+            jsonObject.put("mensaje" , text2 );
+            Log.i(TAG, String.valueOf(jsonObject));
         }
         catch (JSONException e)
         {
@@ -175,7 +191,6 @@ public class OlvideContra extends AppCompatActivity {
             Log.d(TAG, json);
             writeFile(json);
         }
-        //sitodo salio bn saldrá ok
         Toast.makeText(getApplicationContext(), "Ok", Toast.LENGTH_LONG).show();
     }
 
@@ -237,13 +252,5 @@ public class OlvideContra extends AppCompatActivity {
             hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
         }
         return new String(hexChars);
-    }
-    public static String crearJsonCorreo(String Mail , String msg) {
-        Gson gson = new Gson();
-        Map<String, String> stringMap = new LinkedHashMap<>();
-        stringMap.put("correo", Mail);
-        stringMap.put("mensaje", msg);
-        String nuevojson = gson.toJson(stringMap);
-        return nuevojson;
     }
 }
