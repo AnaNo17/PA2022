@@ -35,14 +35,14 @@ public class editacontra extends AppCompatActivity {
     private ListView listView;
     private EditText contra, red;
     private TextView indice;
-    private int []images = { R.drawable.cerrar,R.drawable.llave};
+    private int []images = { R.drawable.cerrar,R.drawable.llave, R.drawable.cerrar};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editacontra);
         listView = (ListView) findViewById(R.id.lista2);
-        editacontra = findViewById(R.id.regresor);
+        editacontra = findViewById(R.id.editacontra2);
         Intent intent = getIntent();
         Object object = null;
         MyInfo info = null;
@@ -136,7 +136,7 @@ public class editacontra extends AppCompatActivity {
     }
     public int toast(int i)
     {
-        Toast.makeText(getBaseContext(),"Vas a editar la contraseña", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getBaseContext(),"Vas a editar la contraseña seleccionada", Toast.LENGTH_SHORT).show();
         return i;
     }
 
